@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import './questGen.css';
 import CrTypeSlider from './crSlider'
 import {  allAnimalSubArrs, monsterSubTheme, 
@@ -131,76 +131,121 @@ const AbberationLab = ({}) => {
     //     setMonDamageTypeStr(`${dmgType}`)
     // };
     //  -------------------------------------------------------------------------------
-    const removeString = (inputString) => {
-        if (inputString == "humanoidTypeStr"){
 
-        } else if (inputString == "beastKinTypeStr"){
+    const removeString = (inputString) => {
+        if (inputString == "reset humanoid"){
+            sethumanoidTypeStr('')
+        } else if (inputString == "reset beastkin"){
             setbeastKinTypeStr('')
-        } else if (inputString == "animalStr"){
+        } else if (inputString == "reset animal"){
             setanimalStr('')
-        } else if (inputString == "mythicCreatureStr"){
+        } else if (inputString == "reset mythic"){
             setmythicCreatureStr('')
-        } else if (inputString == "labMonsterAccessoryStr"){
+        } else if (inputString == "reset accessory1"){
             setlabMonsterAccessoryStr('')
-        } else if (inputString == "labMonsterAccessory2Str"){
+        } else if (inputString == "reset accessory2"){
             setlabMonsterAccessory2Str('')
-        } else if (inputString == "extraAppendageStr"){
+        } else if (inputString == "reset extra appendage"){
             setextraAppendageStr('')
+        } else if (inputString == "reset disfigurement"){
+            setlostAppendageStr('')
         } else {
             console.log(`${inputString}  - caused an unknown error... nothing reset`)
         }
     };
         
 
+    const [abberationStr, setAbberationStr] = useState('');
+// humanoidTypeStr, beastKinTypeStr, animalStr, mythicCreatureStr 
 
-
-
+    const handleCrossbreedString  = () =>{
+        if (humanoidTypeStr && beastKinTypeStr && animalStr && mythicCreatureStr) {
+            return `A ${animalStr} looking ${humanoidTypeStr} with ${beastKinTypeStr} features and the air of a ${mythicCreatureStr}`;
+        } else if (humanoidTypeStr && beastKinTypeStr && animalStr) {
+            return `${humanoidTypeStr} with ${animalStr} features and the air of a ${beastKinTypeStr}`;
+        } else if (humanoidTypeStr && beastKinTypeStr && mythicCreatureStr) {
+            return `${humanoidTypeStr} with ${mythicCreatureStr} features and the air of a ${beastKinTypeStr}`;
+        } else if (humanoidTypeStr && animalStr && mythicCreatureStr) {
+            return `${humanoidTypeStr} with ${mythicCreatureStr}-like features and ${animalStr}-like details`;
+        } else if (animalStr && beastKinTypeStr && mythicCreatureStr) {
+            return `${beastKinTypeStr} with ${animalStr} features and the air of a ${mythicCreatureStr}`;
+        } else if (animalStr && humanoidTypeStr) {
+            return `${humanoidTypeStr} with ${animalStr} features`;
+        } else if (animalStr && mythicCreatureStr) {
+            return `${mythicCreatureStr} crossed with a(n) ${animalStr}`;
+        } else if (animalStr && beastKinTypeStr) {
+            return `${beastKinTypeStr} crossed with a(n) ${animalStr}`;
+        } else if (mythicCreatureStr && beastKinTypeStr) {
+            return `${mythicCreatureStr} with ${beastKinTypeStr} features`;
+        } else if (humanoidTypeStr && beastKinTypeStr) {
+            return `Mostly ${humanoidTypeStr} with ${beastKinTypeStr}-like hints`;
+        } else if (humanoidTypeStr && mythicCreatureStr) {
+            return `${humanoidTypeStr}-${mythicCreatureStr} hybrid`;
+        } else if (humanoidTypeStr){
+            return humanoidTypeStr
+        } else if (beastKinTypeStr){
+            return beastKinTypeStr
+        } else if (mythicCreatureStr){
+            return mythicCreatureStr
+        } else if (animalStr){
+            return animalStr
+        } 
+    }
+    // update abberation string whenever any of the component strings get changes
+      useEffect(() => {
+        setAbberationStr(handleCrossbreedString)
+    }, [humanoidTypeStr, beastKinTypeStr, animalStr, mythicCreatureStr]);
   return (
       <div className='margin-20-sides'>
         <div className="lab-container">
         <p className='lab-title'> The Abberation Lab </p>
             <div className='lab-item-container'>
                 <div className="textarea" >
-                    <button className="sm-lab-btn">X</button>
+                    <button className="sm-lab-btn" onClick={() => removeString("reset humanoid")}>X</button>
                     <button className="lab-btn" onClick={getHumanoidTypeStr}>Humanoid</button>
                     <p className="lab-single-line">{humanoidTypeStr} </p>
                 </div>
                 <div className="textarea" >
-                    <button className="sm-lab-btn">X</button>
+                    <button className="sm-lab-btn" onClick={() => removeString("reset beastkin")}>X</button>
                     <button className="lab-btn" onClick={getrandBeastTypeStr}>Beastkin</button>
                     <p className="lab-single-line">{beastKinTypeStr} </p>
                 </div>
                 <div className="textarea" >
-                    <button className="sm-lab-btn">X</button>
+                    <button className="sm-lab-btn" onClick={() => removeString("reset animal")}>X</button>
                     <button className="lab-btn" onClick={getanimalStr}>Animal</button>
                     <p className="lab-single-line">{animalStr} </p>
                 </div>
                 <div className="textarea" >
-                    <button className="sm-lab-btn">X</button>
+                    <button className="sm-lab-btn" onClick={() => removeString("reset mythic")}>X</button>
                     <button className="lab-btn" onClick={getmythicCreatureStrData}>monster</button>
                     <p className="lab-single-line">{mythicCreatureStr}</p>
                 </div>
+                <p id="hybrid-descriptor">
+                    {abberationStr !== '' ? abberationStr : null}
+                </p>
                 <div className="textarea" >
+                    <button className="sm-lab-btn" onClick={() => removeString("reset accessory1")}>X</button>
                     <button className="lab-btn" onClick={getlabMonsterAccessoryStrData}>Accessory1</button>
                     <p className="lab-single-line">{labMonsterAccessoryStr}</p>
                 </div>
                 <div className="textarea" >
+                    <button className="sm-lab-btn" onClick={() => removeString("reset accessory2")}>X</button>
                     <button className="lab-btn" onClick={getlabMonsterAccessory2StrData}>Accessory2</button>
                     <p className="lab-single-line">{labMonsterAccessory2Str}</p>
                 </div>
                 <div className="textarea" >
+                    <button className="sm-lab-btn" onClick={() => removeString("reset extra appendage")}>X</button>
                     <button className="lab-btn" onClick={getextraAppendageStrData}>Appendages</button>
                     <p className="lab-single-line">{extraAppendageStr}</p>
                 </div>
                 <div className="textarea" >
+                    <button className="sm-lab-btn" onClick={() => removeString("reset disfigurement")}>X</button>
                     <button className="lab-btn" onClick={getLostAppendageStrData}>Disfigurements</button>
                     <p className="lab-single-line last-lab-item">{lostAppendageStr}</p>
                 </div>
             </div>
         </div>
-
-{/* .............................................................. */}
-        <hr></hr>
+                    
         <div className="textarea" >
             <button className="gen-btn button" onClick={getMonPrimaryTypeStr}>MonType</button>
             <textarea className="gen-single-line" readOnly value={monPrimaryTypeStr} />
@@ -227,6 +272,3 @@ const AbberationLab = ({}) => {
     );
 };
 export default AbberationLab;
-
-
-// list of mundane objects for mideval setting like burlap sacks, pots, and barrels
